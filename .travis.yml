@@ -62,4 +62,4 @@
      - platformio update
 
  script:
-     - platformio ci --lib="." --board=ID_1 
+     - platformio ci --lib="." --board=uno 
