@@ -1,0 +1,18 @@
+{
+    
+    
+    
+    "name": "C Style GPIO Handler for ATMEGA328P microcontroller",
+    "keywords": "rf, radio, wireless, spi",
+    "description": "uses C style GPIO functions to control GPIO. this uses less overhead then Arduino Pinmodes/DigitalWrite while still configuring pins on runtime",
+    "authors": 
+    {
+      "name": "Ryan Vrosch",
+      "email": "ryan@vrosch.nl",
+      "url": "http://www.https://github.com/ryan991205/",
+      "maintainer": true
+    },
+    "version": "1.0.1",
+    "frameworks": "arduino",
+    "platforms": "atmelavr"
+   }
