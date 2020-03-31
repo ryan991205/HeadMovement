@@ -71,4 +71,4 @@
      # - PLATFORMIO_CI_SRC=include/Motorcontrol
      #- PLATFORMIO_CI_SRC= ./
  script:
-     - platformio ci --lib="."  --lib="/tmp/Encoder-master" --lib="/tmp/TMC26XStepper-master" --lib="/tmp/maestro-arduino-master"--board=uno
+     - platformio ci --lib="."  --lib="/tmp/Encoder-master" --lib="/tmp/TMC26XStepper-master" --lib="/tmp/maestro-arduino-master" --board=uno
