@@ -20,7 +20,8 @@
          - "~/.platformio"
       
  env:
-     - PLATFORMIO_CI_SRC=src/main.ino
+     - PLATFORMIO_CI_SRC=src/main.cpp
+     #- PLATFORMIO_CI_SRC=lib/GPIO/src
 
  install:
      #platform IO (AVR)
@@ -39,13 +40,10 @@
      - wget https://github.com/PaulStoffregen/Encoder/archive/master.zip -O /tmp/Encoder-master.zip
      - unzip /tmp/Encoder-master.zip -d /tmp/
 
-     - PLATFORMIO_CI_SRC=lib/GPIO/src
-
-
-     #     - PLATFORMIO_CI_SRC=src/main.cpp
+     #- PLATFORMIO_CI_SRC=lib/GPIO/src
 
      # - PLATFORMIO_CI_SRC=include/Motorcontrol
      #- PLATFORMIO_CI_SRC= ./
  script:
-     - platformio ci --lib="."  --lib="/tmp/Encoder-master" --lib="/tmp/TMC26XStepper-master" --lib="/tmp/maestro-arduino-master" --board=uno
+     - platformio ci --lib="." --lib="/lib/GPIO/src"  --lib="/tmp/Encoder-master" --lib="/tmp/TMC26XStepper-master" --lib="/tmp/maestro-arduino-master" --board=uno
      
