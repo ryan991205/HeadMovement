@@ -17,8 +17,8 @@
  language: python
  cache:
      directories:
- 
-        - "~/.platformio"
+         - "~/.platformio"
+      
  env:
      - PLATFORMIO_CI_SRC=src/main.ino
 
@@ -39,9 +39,11 @@
      - wget https://github.com/PaulStoffregen/Encoder/archive/master.zip -O /tmp/Encoder-master.zip
      - unzip /tmp/Encoder-master.zip -d /tmp/
 
+     - PLATFORMIO_CI_SRC=lib/GPIO/src
+
 
      #     - PLATFORMIO_CI_SRC=src/main.cpp
-      - PLATFORMIO_CI_SRC=lib/GPIO/src
+
      # - PLATFORMIO_CI_SRC=include/Motorcontrol
      #- PLATFORMIO_CI_SRC= ./
  script:
