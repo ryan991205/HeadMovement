@@ -8,10 +8,11 @@
 ///	|||	Wont compile (some cases) = Class A { A(int k){} } 
 ///	|||	compiles				  =	Class A{ A(){} A(int k){}}
 
-#include "arduino.h"
+#include <Arduino.h>
+
 #include "IHeadAxis.h"
 #include <TMC26XStepper.h>
-#include <Encoder.h>
+//#include <Encoder.h>
 #include "GPIO.h"
 
 #define BEGINPOINTSENSORPIN 9
@@ -25,7 +26,7 @@ private:
 
 
 	TMC26XStepper Motor;
-	Encoder Encoder;
+	//Encoder Encoder;
 
 public:
 

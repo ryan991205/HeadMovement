@@ -3,6 +3,7 @@
 
 
 HeadAxis_ServoMotor::HeadAxis_ServoMotor() {
+	Serial.begin(9600);
 	// DONT IMPLEMENT 
 }
 
@@ -23,15 +24,15 @@ void HeadAxis_ServoMotor::Move(int position, int speed, int acceleration) {
 }
 
 int HeadAxis_ServoMotor::GetCurrentPosition() {
-	// TODO - implement HeadAxis_ServoMotor::GetCurrentPosition
+	return 0;// TODO - implement HeadAxis_ServoMotor::GetCurrentPosition
 }
 
 byte HeadAxis_ServoMotor::IsMoving() {
-	// TODO - implement HeadAxis_ServoMotor::IsMoving
+	return 0;// TODO - implement HeadAxis_ServoMotor::IsMoving
 }
 
 byte HeadAxis_ServoMotor::OnError() {
-	// TODO - implement HeadAxis_ServoMotor::OnError
+	return 0;// TODO - implement HeadAxis_ServoMotor::OnError
 }
 
 void HeadAxis_ServoMotor::setSpeed(byte min, byte max) {

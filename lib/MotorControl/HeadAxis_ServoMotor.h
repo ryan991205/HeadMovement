@@ -8,9 +8,10 @@
 ///	|||	Wont compile (some cases) = Class A { A(int k){} } 
 ///	|||	compiles				  =	Class A{ A(){} A(int k){}}
 
-#include "arduino.h"
-#include "IHeadAxis.h"
 
+#include <Arduino.h>
+
+#include "IHeadAxis.h"
 #include <PololuMaestro.h>
 #include <SoftwareSerial.h>
 
