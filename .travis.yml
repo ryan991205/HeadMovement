@@ -55,11 +55,27 @@
 
  env:
      - PLATFORMIO_CI_SRC=src/main.cpp
-     - PLATFORMIO_CI_SRC=lib/GPIO/src/
+    #- PLATFORMIO_CI_SRC=lib/GPIO/src/
+    - PLATFORMIO_CI_SRC=lib/
+    #- PLATFORMIO_CI_SRC= ./
+
 
  install:
      - pip install -U platformio
      - platformio update
 
+     - wget https://github.com/pololu/maestro-arduino/archive/master.zip -O /tmp/maestro-arduino-master.zip
+     - unzip /tmp/maestro-arduino-master.zip -d /tmp/
+
+     - wget https://github.com/interactive-matter/TMC26XStepper/archive/master.zip -O /tmp/TMC26XStepper-master.zip
+     - unzip /tmp/TMC26XStepper-master.zip -d /tmp/
+
+     - wget https://github.com/PaulStoffregen/Encoder/archive/master.zip -O /tmp/Encoder-master.zip
+     - unzip /tmp/Encoder-master.zip -d /tmp/
+
+
  script:
-     - platformio ci --lib="." --board=uno 
+
+  - platformio ci --board=uno --lib=./
+
+    # - platformio ci --lib="." --board=uno 
