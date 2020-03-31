@@ -11,7 +11,6 @@ HeadAxis_StepperMotor::HeadAxis_StepperMotor()
 
 HeadAxis_StepperMotor::HeadAxis_StepperMotor(GPIO cs, GPIO dir, GPIO step)
 {
-	int kijk;
 	// TODO - implement HeadAxis_StepperMotor::HeadAxis_StepperMotor
 }
 
@@ -32,16 +31,19 @@ void HeadAxis_StepperMotor::Move(int position, int speed, int acceleration)
 
 int HeadAxis_StepperMotor::GetCurrentPosition() 
 {
+	return 0;
 	// TODO - implement HeadAxis_StepperMotor::GetCurrentPosition
 }
 
 byte HeadAxis_StepperMotor::IsMoving() 
 {
+	return 0;
 	// TODO - implement HeadAxis_StepperMotor::IsMoving
 }
 
 byte HeadAxis_StepperMotor::OnError() 
 {
+	return 0;
 	// TODO - implement HeadAxis_StepperMotor::OnError
 }
 

@@ -1,9 +1,7 @@
 #include "HeadAxis_ServoMotor.h"
 
 
-
 HeadAxis_ServoMotor::HeadAxis_ServoMotor() {
-	Serial.begin(9600);
 	// DONT IMPLEMENT 
 }
 
