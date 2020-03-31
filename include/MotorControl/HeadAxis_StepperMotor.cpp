@@ -11,6 +11,7 @@ HeadAxis_StepperMotor::HeadAxis_StepperMotor()
 
 HeadAxis_StepperMotor::HeadAxis_StepperMotor(GPIO cs, GPIO dir, GPIO step)
 {
+	int kijk;
 	// TODO - implement HeadAxis_StepperMotor::HeadAxis_StepperMotor
 }
 

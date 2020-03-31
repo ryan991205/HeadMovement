@@ -45,20 +45,10 @@
 #
 
  language: python
- python:
-     - "2.7"
 
- sudo: false
  cache:
      directories:
          - "~/.platformio"
-
- env:
-     - PLATFORMIO_CI_SRC=src/main.cpp
-    #- PLATFORMIO_CI_SRC=lib/GPIO/src/
-    - PLATFORMIO_CI_SRC=lib/
-    #- PLATFORMIO_CI_SRC= ./
-
 
  install:
      - pip install -U platformio
@@ -74,8 +64,15 @@
      - unzip /tmp/Encoder-master.zip -d /tmp/
 
 
+env:
+     - PLATFORMIO_CI_SRC=src/main.cpp
+    # - PLATFORMIO_CI_SRC=lib/GPIO/src
+    # - PLATFORMIO_CI_SRC=include/Motorcontrol
+    #- PLATFORMIO_CI_SRC= ./
+
+
  script:
 
-  - platformio ci --board=uno --lib=./
+#  - platformio ci --board=uno --lib=./
 
-    # - platformio ci --lib="." --board=uno 
+     - platformio ci --lib="."  --lib=/tmp/Encoder-master.zip" --lib="/tmp/TMC26XStepper-master.zip" --lib="/tmp/maestro-arduino-master.zip"--board=uno
