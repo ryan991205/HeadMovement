@@ -40,5 +40,5 @@
      - unzip /tmp/Encoder-master.zip -d /tmp/
 
  script:
-     - platformio ci --lib="." --lib="./lib/GPIO/src" --lib="./include/MotorControl"  --lib="/tmp/Encoder-master" --lib="/tmp/TMC26XStepper-master" --lib="/tmp/maestro-arduino-master" --board=uno
+     - platformio ci --lib="." --lib="./lib/GPIO/src" --lib="./lib/MotorControl"  --lib="/tmp/Encoder-master" --lib="/tmp/TMC26XStepper-master" --lib="/tmp/maestro-arduino-master" --board=uno
      

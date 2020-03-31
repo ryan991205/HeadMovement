@@ -1,4 +1,15 @@
+
+
+
+
+
 #include <Arduino.h>
+
+#include <SoftwareSerial.h>
+#include <TMC26XStepper.h>
+#include <PololuMaestro.h>
+
+#include "HeadAxis_StepperMotor.h"
 #include "GPIO.h"
 
 
