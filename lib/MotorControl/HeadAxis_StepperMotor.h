@@ -25,7 +25,7 @@ private:
 	int EndPoint;
 
 
-	TMC26XStepper *Motor;
+	TMC26XStepper Motor;
 	//Encoder Encoder;
 
 public:
