@@ -44,5 +44,5 @@
      - unzip /tmp/Atmel328P_GPIO_C-master.zip -d /tmp/
 
  script:
-     - platformio ci --lib="." --lib="./lib/MotorControl"  --lib="/tmp/Encoder-master" --lib="/tmp/TMC26XStepper-master" --lib="/tmp/maestro-arduino-master" --lib="./tmp/Atmel328P_GPIO_C-master" --board=uno
+     - platformio ci --lib="." --lib="./lib/MotorControl"  --lib="/tmp/Encoder-master" --lib="/tmp/TMC26XStepper-master" --lib="/tmp/maestro-arduino-master" --lib="/tmp/Atmel328P_GPIO_C-master" --board=uno
      
