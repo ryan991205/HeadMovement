@@ -19,11 +19,6 @@
 #define ENDPOINTSENSORPIN 8
 
 
-TMC26XStepper::TMC26XStepper()
-{
-	
-}
-
 
 class HeadAxis_StepperMotor : IHeadAxis {
 
