@@ -18,14 +18,20 @@
 #define BEGINPOINTSENSORPIN 9
 #define ENDPOINTSENSORPIN 8
 
+
+TMC26XStepper::TMC26XStepper()
+{
+	
+}
+
+
 class HeadAxis_StepperMotor : IHeadAxis {
 
 private:
 	int BeginPoint;
 	int EndPoint;
 
-
-	TMC26XStepper Motor;
+	TMC26XStepper Motor ;
 	//Encoder Encoder;
 
 public:
