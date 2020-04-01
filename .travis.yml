@@ -39,6 +39,10 @@
      - wget https://github.com/PaulStoffregen/Encoder/archive/master.zip -O /tmp/Encoder-master.zip
      - unzip /tmp/Encoder-master.zip -d /tmp/
 
+     #include for faster GPIO control 
+     - wget https://github.com/ryan991205/Atmel328P_GPIO_C/archive/master.zip -O /tmp/Atmel328P_GPIO_C-master.zip
+     - unzip /tmp/Atmel328P_GPIO_C-master.zip -d /tmp/
+
  script:
      - platformio ci --lib="." --lib="./lib/GPIO/src" --lib="./lib/MotorControl"  --lib="/tmp/Encoder-master" --lib="/tmp/TMC26XStepper-master" --lib="/tmp/maestro-arduino-master" --board=uno
      

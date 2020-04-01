@@ -8,9 +8,10 @@
 #include <SoftwareSerial.h>
 #include <TMC26XStepper.h>
 #include <PololuMaestro.h>
+#include <GPIO.h>
 
 #include "HeadAxis_StepperMotor.h"
-#include "GPIO.h"
+
 
 
 // blink example
