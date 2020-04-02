@@ -8,12 +8,6 @@
 #include <SoftwareSerial.h>
 
 #include <TMC26XStepper.h>
-
-TMC26XStepper::TMC26XStepper()
-{
-	
-}
-
 #include <PololuMaestro.h>
 #include <GPIO.h>
 

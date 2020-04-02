@@ -26,7 +26,7 @@ private:
 	int BeginPoint;
 	int EndPoint;
 
-	TMC26XStepper Motor ;
+	TMC26XStepper Motor = TMC26XStepper(200, 5, 5, 5, 200);
 	//Encoder Encoder;
 
 public:
