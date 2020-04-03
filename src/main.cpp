@@ -11,7 +11,7 @@
 #include <PololuMaestro.h>
 #include <GPIO.h>
 
-#include "IheadAxis.h"
+#include "IHeadAxis.h"
 #include "HeadAxis_StepperMotor.h"
 #include "HeadAxis_ServoMotor.h"
 
