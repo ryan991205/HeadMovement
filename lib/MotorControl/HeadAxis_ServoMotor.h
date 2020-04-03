@@ -23,7 +23,7 @@ public:
 	
 	//static void EnableServoCommunicator(SoftwareSerial serial);
 	HeadAxis_ServoMotor();
-	HeadAxis_ServoMotor(int channel);
+	HeadAxis_ServoMotor(SoftwareSerial serialPort, int seralBaudRate, int channel);
 
 	void Move(int position);
 

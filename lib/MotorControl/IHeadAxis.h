@@ -7,8 +7,6 @@ class IHeadAxis {
 
 public:
 	virtual ~IHeadAxis() {}
-	
-	virtual void Init() = 0;
 
 	virtual void Move(int position) = 0;
 

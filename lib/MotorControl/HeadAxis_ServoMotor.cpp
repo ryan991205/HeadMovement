@@ -5,7 +5,7 @@ HeadAxis_ServoMotor::HeadAxis_ServoMotor() {
 	// DONT IMPLEMENT 
 }
 
-HeadAxis_ServoMotor::HeadAxis_ServoMotor(int channel) {
+HeadAxis_ServoMotor::HeadAxis_ServoMotor(SoftwareSerial serialPort, int seralBaudRate, int channel) {
 	// TODO - implement HeadAxis_ServoMotor::HeadAxis_ServoMotor
 }
 

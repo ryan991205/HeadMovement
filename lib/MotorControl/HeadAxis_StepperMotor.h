@@ -20,16 +20,26 @@
 
 
 
-class HeadAxis_StepperMotor : IHeadAxis {
+class HeadAxis_StepperMotor : public IHeadAxis {
 
 private:
-	int BeginPoint;
-	int EndPoint;
+
+	// stepper orientation
+	//long StepBeginPoint 	= 0;
+	//long StepEndPoint 		= 0;
+	//long StepCenterPoint	= 0;
+	//long StepPosition		= 0;
+
+
 
 	TMC26XStepper Motor = TMC26XStepper(200, 5, 5, 5, 200);
-	//Encoder Encoder;
+
+	unsigned char MoveToBeginPoint();
+	unsigned char MoveToEndPoint();
 
 public:
+
+	//void Calibrate();
 
 	HeadAxis_StepperMotor();
 	
@@ -54,14 +64,7 @@ public:
 	static void HandleSteps()
 	{
 
-	}
-
-
-	// BEGIN:
-	void Calibrate();
-	
-
-	
+	}	
 };
 
 #endif
