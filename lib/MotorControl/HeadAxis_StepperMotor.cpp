@@ -1,29 +1,89 @@
 
 #include "HeadAxis_StepperMotor.h"
+#include "Timer.h"
 
 #define CW 0
 #define CCW 1
 
 
-void HeadAxis_StepperMotor::Update()
+void HeadAxis_StepperMotor::StartAutoUpdater()
 {
-	MotorControlChip.move();
+	// init
+	TIMER1_R->CR_A = 0; 
+	TIMER1_R->CR_B = 0;
+	TIMER1_R->CR_B |= TIMER1_CRB_WGM12_M;		// put Timer one in CTC mode 
+	TIMER1_R->CR_B |= CS_No_Prescale_1;	
+
+	TIMER1_R->OUTPUT_COMPARE_A = 1250;	// updatefreq
+
+	// timer enable
+	TIMER1_R->TIMER_COUNTER = 0;
+	TIMER_INTERRUPTS_R->TIMER_1 |= TIMER_INT_COMPARE_A_ENABLE_M;
 }
 
+void HeadAxis_StepperMotor::StopAutoUpdater()
+{
+	TIMER1_R->TIMER_COUNTER = 0;
+	TIMER_INTERRUPTS_R->TIMER_1 &= ~TIMER_INT_COMPARE_A_ENABLE_M;
+}
+// end TIMER fucnt 
 
+
+
+
+void HeadAxis_StepperMotor::PositionUpdater()
+{
+	if(MotorRotation == CCW) 	{ StepPosition--;}
+	else 						{ StepPosition++;}
+
+	if((StepPosition > NewStepPosition-20) && (StepPosition < NewStepPosition +20))
+	{
+		MotorRunning = false;
+	}
+
+
+
+
+
+}
+
+void HeadAxis_StepperMotor::Update()
+{
+	if(MotorRunning)
+	{
+		PositionUpdater();
+		GPIO_PinToggle(STEP_PIN);
+	}
+}
 
 void HeadAxis_StepperMotor::MoveToInitPoint(GPIO *hallSensor, int direction, long readDelay)
 {
 	long SensorBeforeReadCount = 0;
 	GPIO_PinWrite(DIR_PIN, direction);
+	MotorRotation = direction;
 	while(1)
 	{
 		GPIO_PinToggle(STEP_PIN);
-		_delay_us(25);
+		_delay_us(55);
+		if(direction == CW)
+		{
+			StepPosition++;
+		}
 
 		SensorBeforeReadCount++;
 		if((GPIO_PinRead(hallSensor) == LOW) && (SensorBeforeReadCount > readDelay))
 		{
+			if(direction == CCW)
+			{
+				StepPosition = 0;
+				StepBeginPoint= 0;
+				Serial.println(StepBeginPoint);
+			}
+			else
+			{
+				StepEndPoint = StepPosition;
+				Serial.println(StepEndPoint);
+			}	
 			break;
 		}
 	}
@@ -51,7 +111,7 @@ void HeadAxis_StepperMotor::Calibrate()
 	// save shit
 	delay(500);
 	MoveToEndPoint();
-	// save shit
+	delay(100);
 }
 
 
@@ -82,7 +142,7 @@ HeadAxis_StepperMotor::HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GP
 	MotorControlChip.setRandomOffTime(0);
 	MotorControlChip.setSpreadCycleChopper(2,24,8,6,0);
 	MotorControlChip.setStallGuardThreshold(4,0);
-	MotorControlChip.setMicrosteps(64);
+	MotorControlChip.setMicrosteps(32);
 
 	MotorControlChip.start();
 	MotorControlChip.setSpeed(100);
@@ -94,9 +154,27 @@ HeadAxis_StepperMotor::HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GP
 
 void HeadAxis_StepperMotor::Move(int position) 
 {
-	MotorControlChip.step(position);
-	//	MotorControlChip.step(1000);
+	NewStepPosition = map(position,-90,90,StepBeginPoint,StepEndPoint);
+
+	if(NewStepPosition == StepPosition)
+	{
+		MotorRunning = false;
+		return;
+	} 
+	else if(NewStepPosition < StepPosition)
+	{
+		MotorRotation = CCW;
+		GPIO_PinWrite(DIR_PIN, CCW);
+	}
+	else
+	{
+		MotorRotation = CW;
+		GPIO_PinWrite(DIR_PIN, CW);
+	}
+	MotorRunning = true;	
 }
+
+
 
 void HeadAxis_StepperMotor::Move(int position, int speed) 
 {

@@ -32,10 +32,15 @@ private:
 
 
 	// stepper orientation
-	//long StepBeginPoint 	= 0;
-	//long StepEndPoint 		= 0;
-	//long StepCenterPoint	= 0;
-	//long StepPosition		= 0;
+	long StepBeginPoint 	= 0;
+	long StepEndPoint 		= 0;
+	long StepCenterPoint	= 0;
+	long StepPosition		= 0;
+	long NewStepPosition 	= 0;
+
+
+	uint8_t MotorRotation 	= 0;
+	uint8_t MotorRunning 	= 0;
 
 
 
@@ -46,7 +51,17 @@ private:
 	void MoveToEndPoint();
 	void MoveToCenterPoint();
 
+	void PositionUpdater();
+
 public:
+	static void StartAutoUpdater();
+	static void StopAutoUpdater();
+
+
+
+
+
+
 
 	void Calibrate();
 	void Update();

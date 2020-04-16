@@ -14,7 +14,7 @@
 // MAPPING Motors:
 ///         | degrees min | degrees center | degrees max |  | realVal min | realVal center | realVal max
 ///         | ------------|----------------|-------------|--|-------------|----------------|-------------
-///    PAN  | -90         | 0              | +90         |><|             |                |             (val in Steps)
+///    PAN  | -90         | 0              | +90         |><| 0           |               | 70800       (val in Steps /32e)
 ///    TILT | +55*        | 0              | -10         |><| 1300/5200   | 1850/7400      | 2000/8000   (val in uS)/(val in programUnits)
 ///    ROLL | -45         | 0              | +45         |><| 1248/5000   | 1645/6580      | 2000/8000   (val in uS)/(val in programUnits)
 ///
@@ -59,6 +59,16 @@ IHeadAxis *motor = &PanMotor;
 
 //MicroMaestro m;
 
+
+
+// ADD all Motor Update functions here
+ISR(TIMER1_COMPA_vect)
+{
+   PanMotor.Update();
+   TiltMotor.Update();
+   RollMotor.Update();
+}
+
 void setup()
 {
    ServoCommunicator.begin(9600);
@@ -75,6 +85,7 @@ void setup()
  RollMotor = HeadAxis_ServoMotor(&ServoController, 0, &RollCalibration);
 
  PanMotor.Calibrate();
+ HeadAxis_StepperMotor::StartAutoUpdater();
 
  Serial.println("initCompete");
 
@@ -88,15 +99,14 @@ void setup()
 
 void loop() 
 {
+   PanMotor.Move(0);
 
-   RollMotor.Move(25);
-   TiltMotor.Move(00);
+   RollMotor.Move(0);
+  // TiltMotor.Move(00);
    delay(2000);
-   RollMotor.Move(-25);
-   TiltMotor.Move(45);
-   delay(2000);
-   Serial.print("looping");
-
+   //RollMotor.Move(-25);
+   //TiltMotor.Move(45);
+   delay(1000);
 
 /*
 if(GPIO_PinRead(&HALL1_PAN) == LOW)
