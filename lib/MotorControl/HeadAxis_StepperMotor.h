@@ -23,6 +23,13 @@
 class HeadAxis_StepperMotor : public IHeadAxis {
 
 private:
+	GPIO *CS_PIN;
+	GPIO *DIR_PIN;
+	GPIO *STEP_PIN;
+	GPIO *HALL1;
+	GPIO *HALL2;
+
+
 
 	// stepper orientation
 	//long StepBeginPoint 	= 0;
@@ -32,18 +39,21 @@ private:
 
 
 
-	TMC26XStepper Motor = TMC26XStepper(200, 5, 5, 5, 200);
+	TMC26XStepper MotorControlChip = TMC26XStepper(200, 5, 5, 5, 5, 200);
 
-	unsigned char MoveToBeginPoint();
-	unsigned char MoveToEndPoint();
+	void MoveToInitPoint(GPIO *hallSensor, int direction, long readDelay);
+	void MoveToBeginPoint();
+	void MoveToEndPoint();
+	void MoveToCenterPoint();
 
 public:
 
-	//void Calibrate();
+	void Calibrate();
+	void Update();
 
 	HeadAxis_StepperMotor();
-	
-	HeadAxis_StepperMotor(GPIO cs, GPIO dir, GPIO step);
+
+	HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GPIO *hall1, GPIO *hall2, int current);
 
 	void Move(int position);
 

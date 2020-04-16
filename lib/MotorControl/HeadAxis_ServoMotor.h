@@ -16,14 +16,22 @@
 #include <SoftwareSerial.h>
 
 
-class HeadAxis_ServoMotor : IHeadAxis {
+class HeadAxis_ServoMotor : IHeadAxis 
+{
+private:
+
+	MicroMaestro* ServoController;
+	CalibrationSet* MotorCalibration;
+	int _channel;
+
+	int _std_Accel = 127;
+	int _std_Speed = 25 ;
 
 public:
-	//MicroMaestro ServoCommunicator;
+	void Update();
 	
-	//static void EnableServoCommunicator(SoftwareSerial serial);
 	HeadAxis_ServoMotor();
-	HeadAxis_ServoMotor(SoftwareSerial serialPort, int seralBaudRate, int channel);
+	HeadAxis_ServoMotor(MicroMaestro* ServoHandler, int channel, CalibrationSet* motorCalibration);
 
 	void Move(int position);
 

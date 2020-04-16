@@ -2,9 +2,22 @@
 #define IHEADAXIS_H
 
 
-class IHeadAxis {
+typedef struct 
+{
+   int16_t PointInDegrees;
+   int32_t PointInMotorRotation;
+} Point;
+
+typedef struct 
+{		
+	Point MinPoint;		 
+	Point CenterPoint;  
+	Point MaxPoint;		  
+} CalibrationSet;
 
 
+class IHeadAxis 
+{
 public:
 	virtual ~IHeadAxis() {}
 
@@ -19,6 +32,8 @@ public:
 	virtual byte IsMoving() = 0;
 
 	virtual byte OnError() = 0;
+
+	virtual void Update();
 };
 
 #endif
