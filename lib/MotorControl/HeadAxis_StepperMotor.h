@@ -18,21 +18,57 @@
 #define BEGINPOINTSENSORPIN 9
 #define ENDPOINTSENSORPIN 8
 
-class HeadAxis_StepperMotor : IHeadAxis {
+
+
+class HeadAxis_StepperMotor : public IHeadAxis {
 
 private:
-	int BeginPoint;
-	int EndPoint;
+	GPIO *CS_PIN;
+	GPIO *DIR_PIN;
+	GPIO *STEP_PIN;
+	GPIO *HALL1;
+	GPIO *HALL2;
 
 
-	TMC26XStepper *Motor;
-	//Encoder Encoder;
+
+	// stepper orientation
+	long StepBeginPoint 	= 0;
+	long StepEndPoint 		= 0;
+	long StepCenterPoint	= 0;
+	long StepPosition		= 0;
+	long NewStepPosition 	= 0;
+
+
+	uint8_t MotorRotation 	= 0;
+	uint8_t MotorRunning 	= 0;
+
+
+
+	TMC26XStepper MotorControlChip = TMC26XStepper(200, 5, 5, 5, 5, 200);
+
+	void MoveToInitPoint(GPIO *hallSensor, int direction, long readDelay);
+	void MoveToBeginPoint();
+	void MoveToEndPoint();
+	void MoveToCenterPoint();
+
+	void PositionUpdater();
 
 public:
+	static void StartAutoUpdater();
+	static void StopAutoUpdater();
+
+
+
+
+
+
+
+	void Calibrate();
+	void Update();
 
 	HeadAxis_StepperMotor();
-	
-	HeadAxis_StepperMotor(GPIO cs, GPIO dir, GPIO step);
+
+	HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GPIO *hall1, GPIO *hall2, int current);
 
 	void Move(int position);
 
@@ -53,14 +89,7 @@ public:
 	static void HandleSteps()
 	{
 
-	}
-
-
-	// BEGIN:
-	void Calibrate();
-	
-
-	
+	}	
 };
 
 #endif
