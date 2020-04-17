@@ -109,9 +109,9 @@ void HeadAxis_StepperMotor::Calibrate()
 {
 	MoveToBeginPoint();
 	// save shit
-	delay(500);
+	delay(250);
 	MoveToEndPoint();
-	delay(100);
+	delay(50);
 }
 
 

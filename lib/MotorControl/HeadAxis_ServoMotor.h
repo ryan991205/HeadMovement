@@ -16,7 +16,7 @@
 #include <SoftwareSerial.h>
 
 
-class HeadAxis_ServoMotor : IHeadAxis 
+class HeadAxis_ServoMotor : public IHeadAxis 
 {
 private:
 

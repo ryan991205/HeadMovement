@@ -1,5 +1,4 @@
 #include <Arduino.h>
-
 #include <SoftwareSerial.h>
 
 #include <TMC26XStepper.h>
@@ -9,20 +8,22 @@
 #include "IHeadAxis.h"
 #include "HeadAxis_StepperMotor.h"
 #include "HeadAxis_ServoMotor.h"
+#include "HeadControl.h"
+#include "Communicator.h"
 
 
 // MAPPING Motors:
 ///         | degrees min | degrees center | degrees max |  | realVal min | realVal center | realVal max
 ///         | ------------|----------------|-------------|--|-------------|----------------|-------------
-///    PAN  | -90         | 0              | +90         |><| 0           |               | 70800       (val in Steps /32e)
-///    TILT | +55*        | 0              | -10         |><| 1300/5200   | 1850/7400      | 2000/8000   (val in uS)/(val in programUnits)
+///    PAN  | -90         | 0              | +90         |><| 0           |                | 70800+-     (val in Steps /32e)
+///    TILT | +55         | 0              | -10         |><| 1300/5200   | 1850/7400      | 2000/8000   (val in uS)/(val in programUnits)
 ///    ROLL | -45         | 0              | +45         |><| 1248/5000   | 1645/6580      | 2000/8000   (val in uS)/(val in programUnits)
 ///
 // motor calibration:            Degrees  , program units   
-CalibrationSet PanCalibration =  {  {-90  , 0      },      //min
-                                    {0    , 0      },      //center
-                                    {90   , 0      }};     //max
-CalibrationSet TiltCalibration = {  {-10  , 8000   },      //min
+CalibrationSet PanCalibration =  {  {-90  , 0      },      //min     (auto calibration)
+                                    {0    , 0      },      //center  (auto calibration)
+                                    {90   , 0      }};     //max     (auto calibration)
+CalibrationSet TiltCalibration = {  {-10  , 8000   },      //min     
                                     {0    , 7400   },      //center
                                     {55   , 5200   }};     //max
 CalibrationSet RollCalibration = {  {-45  , 5000   },      //min
@@ -32,7 +33,7 @@ CalibrationSet RollCalibration = {  {-45  , 5000   },      //min
 
 
 // PIN DEFINE! warning this does not initialise pins. use GPIO_InitPinFromStruct() function for that.
-// STEPPERMOTOR
+// control pins steppermotor 
 GPIO TMC_CS_Pin     = {.DIR = OUTPUT, .PORT = PORT_D, .PIN = 7};
 GPIO TMC_DIR_Pin    = {.DIR = OUTPUT, .PORT = PORT_D, .PIN = 6};
 GPIO TMC_STEP_Pin   = {.DIR = OUTPUT, .PORT = PORT_D, .PIN = 5};
@@ -49,16 +50,18 @@ GPIO mcu_RX         = {.DIR = INPUT,  .PORT = PORT_C, .PIN = 5};
 SoftwareSerial ServoCommunicator(GPIO_getArduinoPin(&mcu_RX),GPIO_getArduinoPin(&mcu_TX));
 MicroMaestro ServoController(ServoCommunicator);
 
- // Motors
+// Motors
 HeadAxis_StepperMotor   PanMotor;
 HeadAxis_ServoMotor     TiltMotor;
 HeadAxis_ServoMotor     RollMotor;
 
-IHeadAxis *motor = &PanMotor;
+// abstract Motor pointers
+IHeadAxis *PanHandler    = &PanMotor;
+IHeadAxis *TiltHandler   = &TiltMotor;
+IHeadAxis *RollHandler   = &RollMotor;
 
-
-//MicroMaestro m;
-
+// Headcontroller (main system)
+HeadControl Head;
 
 
 // ADD all Motor Update functions here
@@ -69,30 +72,27 @@ ISR(TIMER1_COMPA_vect)
    RollMotor.Update();
 }
 
+// Initialisation
 void setup()
 {
    ServoCommunicator.begin(9600);
    Serial.begin(9600);
    delay(10);
 
+   // Setting up Motors
+   PanMotor  = HeadAxis_StepperMotor(&TMC_CS_Pin, &TMC_DIR_Pin, &TMC_STEP_Pin, &HALL1_PAN, &HALL2_PAN, 120);
+   TiltMotor = HeadAxis_ServoMotor(&ServoController, 1, &TiltCalibration);
+   RollMotor = HeadAxis_ServoMotor(&ServoController, 0, &RollCalibration);
 
+   // Starting and initialising/calibrate a stepperMotor
+   PanMotor.Calibrate();
+   HeadAxis_StepperMotor::StartAutoUpdater();
 
- ServoCommunicator.begin(9600);
- PanMotor  = HeadAxis_StepperMotor(&TMC_CS_Pin, &TMC_DIR_Pin, &TMC_STEP_Pin, &HALL1_PAN, &HALL2_PAN, 120);
+   //init HeadController
+   Head = HeadControl(PanHandler , TiltHandler , RollHandler);
 
-
- TiltMotor = HeadAxis_ServoMotor(&ServoController, 1, &TiltCalibration);
- RollMotor = HeadAxis_ServoMotor(&ServoController, 0, &RollCalibration);
-
- PanMotor.Calibrate();
- HeadAxis_StepperMotor::StartAutoUpdater();
-
- Serial.println("initCompete");
-
-  
- // delay(5);
- delay(1000);
-
+ Serial.println("# initComplete");
+ delay(10);
 }
 
 

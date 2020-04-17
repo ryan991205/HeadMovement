@@ -38,8 +38,8 @@ void HeadAxis_ServoMotor::Move(int position, int speed, int acceleration)
 		}
 	
 	int motorVal = map(	position,
-						MotorCalibration->MinPoint.PointInDegrees,MotorCalibration->MaxPoint.PointInDegrees,
-						MotorCalibration->MinPoint.PointInMotorRotation,MotorCalibration->MaxPoint.PointInMotorRotation);
+						MotorCalibration->MinPoint.PointInDegrees,			MotorCalibration->MaxPoint.PointInDegrees,
+						MotorCalibration->MinPoint.PointInMotorRotation,	MotorCalibration->MaxPoint.PointInMotorRotation);
 
 	ServoController->setSpeed(_channel, speed);
 	ServoController->setAcceleration(_channel, acceleration);
