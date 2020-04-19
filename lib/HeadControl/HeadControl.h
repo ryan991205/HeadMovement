@@ -19,10 +19,13 @@ class HeadControl{
     IHeadAxis* PanMotor;
     IHeadAxis* TiltMotor;
     IHeadAxis* RollMotor;
+    uint8_t RollMotorPresent;
 
-    Location HomeLocation;
-    Location CurrentLocation;
-    Location GoingToLocation;
+    Location HomeLocation = {0,0,0};
+    Location CurrentLocation = {0,0,0};
+    Location GoingToLocation= {0,0,0};
+
+    Location GetLocationFromMotors();
 
     public:
 

@@ -49,7 +49,6 @@ private:
 	void MoveToInitPoint(GPIO *hallSensor, int direction, long readDelay);
 	void MoveToBeginPoint();
 	void MoveToEndPoint();
-	void MoveToCenterPoint();
 
 	void PositionUpdater();
 
@@ -84,7 +83,7 @@ public:
 
 	void setMaxCurrent(int I_mA);
 
-	void setMaxSpeed(int speed);
+	void setSpeed(int speed);
 
 	static void HandleSteps()
 	{

@@ -80,7 +80,7 @@ void setup()
    delay(10);
 
    // Setting up Motors
-   PanMotor  = HeadAxis_StepperMotor(&TMC_CS_Pin, &TMC_DIR_Pin, &TMC_STEP_Pin, &HALL1_PAN, &HALL2_PAN, 120);
+   PanMotor  = HeadAxis_StepperMotor(&TMC_CS_Pin, &TMC_DIR_Pin, &TMC_STEP_Pin, &HALL1_PAN, &HALL2_PAN, 100);
    TiltMotor = HeadAxis_ServoMotor(&ServoController, 1, &TiltCalibration);
    RollMotor = HeadAxis_ServoMotor(&ServoController, 0, &RollCalibration);
 
@@ -99,40 +99,16 @@ void setup()
 
 void loop() 
 {
-   PanMotor.Move(0);
-
-   RollMotor.Move(0);
-  // TiltMotor.Move(00);
-   delay(2000);
-   //RollMotor.Move(-25);
-   //TiltMotor.Move(45);
-   delay(1000);
-
-/*
-if(GPIO_PinRead(&HALL1_PAN) == LOW)
-{   
-   Serial.println("H1_LOW");
-}
-if(GPIO_PinRead(&HALL2_PAN) == LOW)
-{
+   PanMotor.setSpeed(50);
+   Head.MoveTo(0,0,0);
+   delay(3000);
+    PanMotor.setSpeed(100);
+   Head.MoveTo(45,35,10);
+   delay(3000);
+    PanMotor.setSpeed(20);
+   Head.MoveTo(0,0,0);
+   delay(3000);
+   Head.MoveTo(-45,-10,-10);
+   delay(3000);
    
-   Serial.println("H2_LOW");
-}
-delay(100);
-*/
-
-
- //GPIO_PinWrite(&TMC_STEP_Pin,HIGH);
- //delay(1);
-// GPIO_PinWrite(&TMC_STEP_Pin,LOW);
- //delay(1);
-
-
- // delay(1000);
- // PanMotor.Move(400);
- // while(1)
- // {
- //PanMotor.Update();
- // }
-
 }

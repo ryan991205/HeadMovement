@@ -46,9 +46,11 @@ void HeadAxis_ServoMotor::Move(int position, int speed, int acceleration)
 	ServoController->setTarget(_channel,motorVal);
 }
 
+// WARNING NOT IMPLEMENTED 
 int HeadAxis_ServoMotor::GetCurrentPosition() 
 {	
-	return ServoController->getPosition(_channel);
+	return 0;
+	// still needs to be edited to return good value from:  ServoController->getPosition(_channel);
 }
 
 byte HeadAxis_ServoMotor::IsMoving() 
@@ -56,6 +58,7 @@ byte HeadAxis_ServoMotor::IsMoving()
 	return ServoController->getMovingState();
 }
 
+// WARNING ! NOT IMPLEMENTED
 byte HeadAxis_ServoMotor::OnError() 
 {
 	

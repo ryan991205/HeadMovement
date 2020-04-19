@@ -14,7 +14,7 @@ void HeadAxis_StepperMotor::StartAutoUpdater()
 	TIMER1_R->CR_B |= TIMER1_CRB_WGM12_M;		// put Timer one in CTC mode 
 	TIMER1_R->CR_B |= CS_No_Prescale_1;	
 
-	TIMER1_R->OUTPUT_COMPARE_A = 1250;	// updatefreq
+	TIMER1_R->OUTPUT_COMPARE_A = 350;	// updatefreq
 
 	// timer enable
 	TIMER1_R->TIMER_COUNTER = 0;
@@ -40,11 +40,6 @@ void HeadAxis_StepperMotor::PositionUpdater()
 	{
 		MotorRunning = false;
 	}
-
-
-
-
-
 }
 
 void HeadAxis_StepperMotor::Update()
@@ -64,7 +59,7 @@ void HeadAxis_StepperMotor::MoveToInitPoint(GPIO *hallSensor, int direction, lon
 	while(1)
 	{
 		GPIO_PinToggle(STEP_PIN);
-		_delay_us(55);
+		_delay_us(40);
 		if(direction == CW)
 		{
 			StepPosition++;
@@ -77,12 +72,10 @@ void HeadAxis_StepperMotor::MoveToInitPoint(GPIO *hallSensor, int direction, lon
 			{
 				StepPosition = 0;
 				StepBeginPoint= 0;
-				Serial.println(StepBeginPoint);
 			}
 			else
 			{
 				StepEndPoint = StepPosition;
-				Serial.println(StepEndPoint);
 			}	
 			break;
 		}
@@ -99,19 +92,13 @@ void HeadAxis_StepperMotor::MoveToEndPoint()
 		MoveToInitPoint(HALL2, CW, 2500);
 }
 
-void HeadAxis_StepperMotor::MoveToCenterPoint()
-{
-
-}
-
 
 void HeadAxis_StepperMotor::Calibrate()
 {
 	MoveToBeginPoint();
-	// save shit
-	delay(250);
+	delay(200);
 	MoveToEndPoint();
-	delay(50);
+	delay(200);
 }
 
 
@@ -137,24 +124,20 @@ HeadAxis_StepperMotor::HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GP
 	GPIO_InitPinFromStruct(HALL1);
 	GPIO_InitPinFromStruct(HALL2);
 
-	//MotorControlChip = TMC26XStepper(200,7,6,5,current);
-	MotorControlChip = TMC26XStepper(800,GPIO_getArduinoPin(cs),GPIO_getArduinoPin(dir),GPIO_getArduinoPin(step),current);
-	MotorControlChip.setRandomOffTime(0);
+	// The motor contol library is not used to move the motor. only to setup the Chip and extra functions microstep &SpreadCycleChopper
+	MotorControlChip = TMC26XStepper(0,GPIO_getArduinoPin(cs),GPIO_getArduinoPin(dir),GPIO_getArduinoPin(step),current);
+	MotorControlChip.setRandomOffTime(-1);
 	MotorControlChip.setSpreadCycleChopper(2,24,8,6,0);
-	MotorControlChip.setStallGuardThreshold(4,0);
-	MotorControlChip.setMicrosteps(32);
-
+	MotorControlChip.setStallGuardThreshold(50,-1);
+	MotorControlChip.setCoolStepEnabled(true);
+	MotorControlChip.setMicrosteps(64);
 	MotorControlChip.start();
-	MotorControlChip.setSpeed(100);
-	delay(1000);
-	
-
-	// TODO - implement initialisation 
+	delay(250);
 }
 
 void HeadAxis_StepperMotor::Move(int position) 
 {
-	NewStepPosition = map(position,-90,90,StepBeginPoint,StepEndPoint);
+	NewStepPosition = map(position,-177,177,StepBeginPoint,StepEndPoint);
 
 	if(NewStepPosition == StepPosition)
 	{
@@ -174,42 +157,51 @@ void HeadAxis_StepperMotor::Move(int position)
 	MotorRunning = true;	
 }
 
-
-
 void HeadAxis_StepperMotor::Move(int position, int speed) 
 {
-	// TODO - implement HeadAxis_StepperMotor::Move
+	setSpeed(speed);
+	Move(position);
 }
 
+// NOT IMPLEMENTED!
 void HeadAxis_StepperMotor::Move(int position, int speed, int acceleration) 
-{
-	// TODO - implement HeadAxis_StepperMotor::Move
+{	
+	// WARNING ! acceleration is not implemented at the moment!!! 
+	setSpeed(speed);
+	Move(position);
 }
+	
 
 int HeadAxis_StepperMotor::GetCurrentPosition() 
 {
-	return 0;
-	// TODO - implement HeadAxis_StepperMotor::GetCurrentPosition
+	int currentPosition = map(StepPosition,StepBeginPoint,StepEndPoint,-177,177);
+	return currentPosition;
 }
+
 
 byte HeadAxis_StepperMotor::IsMoving() 
 {
-	return 0;
-	// TODO - implement HeadAxis_StepperMotor::IsMoving
+	return MotorRunning;
 }
 
+//NOT IMPLEMENTED
 byte HeadAxis_StepperMotor::OnError() 
 {
-	return 0;
 	// TODO - implement HeadAxis_StepperMotor::OnError
+	return 0;	
 }
 
 void HeadAxis_StepperMotor::setMaxCurrent(int I_mA) 
 {
-	// TODO - implement HeadAxis_StepperMotor::setMaxCurrent
+	if(I_mA < 50) return; 
+	MotorControlChip.setCurrent(I_mA);
 }
 
-void HeadAxis_StepperMotor::setMaxSpeed(int speed) 
+void HeadAxis_StepperMotor::setSpeed(int speed) 
 {
-	// TODO - implement HeadAxis_StepperMotor::setMaxSpeed
+	int updateSpeed = map(speed,0,100,1350,350);
+	cli();
+	TIMER1_R->TIMER_COUNTER = 0;
+	TIMER1_R->OUTPUT_COMPARE_A = updateSpeed;
+	sei();
 }
