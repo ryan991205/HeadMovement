@@ -6,9 +6,9 @@
 #include "IHeadAxis.h"
 
 typedef struct {	
-	 uint16_t pan;					
-	 uint16_t tilt;
-     uint16_t roll;					
+	 int16_t pan;					
+	 int16_t tilt;
+     int16_t roll;					
 } Location;
 
 

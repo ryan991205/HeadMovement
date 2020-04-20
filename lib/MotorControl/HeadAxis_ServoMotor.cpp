@@ -31,6 +31,8 @@ void HeadAxis_ServoMotor::Move(int position, int speed)
 
 void HeadAxis_ServoMotor::Move(int position, int speed, int acceleration) 
 {	
+	if(position == IGNORE_MOVEMENT)return;
+
 	if( position < MotorCalibration->MinPoint.PointInDegrees || 
 		position > MotorCalibration->MaxPoint.PointInDegrees)
 		{

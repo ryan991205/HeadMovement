@@ -1,6 +1,7 @@
 #ifndef IHEADAXIS_H
 #define IHEADAXIS_H
 
+#define IGNORE_MOVEMENT 125
 
 typedef struct 
 {

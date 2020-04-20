@@ -1,6 +1,8 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+// copyright Ryan vrösch 2020 all rights reserved 
+
 #include "Arduino.h"
 
 #define CPU_Clock 16000000

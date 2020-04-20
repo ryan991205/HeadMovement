@@ -72,10 +72,12 @@ void HeadAxis_StepperMotor::MoveToInitPoint(GPIO *hallSensor, int direction, lon
 			{
 				StepPosition = 0;
 				StepBeginPoint= 0;
+				MotorCalibration->MinPoint.PointInMotorRotation = 0;
 			}
 			else
 			{
 				StepEndPoint = StepPosition;
+				MotorCalibration->MaxPoint.PointInMotorRotation = StepPosition;
 			}	
 			break;
 		}
@@ -110,13 +112,14 @@ HeadAxis_StepperMotor::HeadAxis_StepperMotor()
 	// DONT IMPLEMENT!
 }
 
-HeadAxis_StepperMotor::HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GPIO *hall1, GPIO *hall2, int current)
+HeadAxis_StepperMotor::HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GPIO *hall1, GPIO *hall2, int current, CalibrationSet *motorCalibration)
 {
 	CS_PIN		= cs;
 	DIR_PIN 	= dir;
 	STEP_PIN 	= step;
 	HALL1		= hall1;
 	HALL2		= hall2;
+	MotorCalibration = motorCalibration;
 
 	GPIO_InitPinFromStruct(CS_PIN);
 	GPIO_InitPinFromStruct(DIR_PIN);
@@ -132,12 +135,27 @@ HeadAxis_StepperMotor::HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GP
 	MotorControlChip.setCoolStepEnabled(true);
 	MotorControlChip.setMicrosteps(64);
 	MotorControlChip.start();
-	delay(250);
+	delay(100);
+	Calibrate();
+
+
+
 }
 
 void HeadAxis_StepperMotor::Move(int position) 
 {
-	NewStepPosition = map(position,-177,177,StepBeginPoint,StepEndPoint);
+	//NewStepPosition = map(position,MotorCalibration->MinPoint.PointInDegrees,MotorCalibration->MaxPoint.PointInDegrees,
+	//								StepBeginPoint,StepEndPoint);
+	if(position == IGNORE_MOVEMENT)return;
+
+	if( position < MotorCalibration->MinPoint.PointInDegrees || 
+		position > MotorCalibration->MaxPoint.PointInDegrees)
+		{
+			return;
+		}
+
+	NewStepPosition = map(position,MotorCalibration->MinPoint.PointInDegrees,MotorCalibration->MaxPoint.PointInDegrees,
+									MotorCalibration->MinPoint.PointInMotorRotation,MotorCalibration->MaxPoint.PointInMotorRotation);
 
 	if(NewStepPosition == StepPosition)
 	{
@@ -166,7 +184,7 @@ void HeadAxis_StepperMotor::Move(int position, int speed)
 // NOT IMPLEMENTED!
 void HeadAxis_StepperMotor::Move(int position, int speed, int acceleration) 
 {	
-	// WARNING ! acceleration is not implemented at the moment!!! 
+	// WARNING ! acceleration is not implemented!
 	setSpeed(speed);
 	Move(position);
 }
@@ -174,7 +192,9 @@ void HeadAxis_StepperMotor::Move(int position, int speed, int acceleration)
 
 int HeadAxis_StepperMotor::GetCurrentPosition() 
 {
-	int currentPosition = map(StepPosition,StepBeginPoint,StepEndPoint,-177,177);
+	int currentPosition = map(StepPosition,
+								MotorCalibration->MinPoint.PointInMotorRotation,MotorCalibration->MaxPoint.PointInMotorRotation,
+								MotorCalibration->MinPoint.PointInDegrees,MotorCalibration->MaxPoint.PointInDegrees);
 	return currentPosition;
 }
 
@@ -199,7 +219,9 @@ void HeadAxis_StepperMotor::setMaxCurrent(int I_mA)
 
 void HeadAxis_StepperMotor::setSpeed(int speed) 
 {
-	int updateSpeed = map(speed,0,100,1350,350);
+	if(speed > 100 || speed < 0) return;
+
+	int updateSpeed = map(speed,0,100,2000,400);
 	cli();
 	TIMER1_R->TIMER_COUNTER = 0;
 	TIMER1_R->OUTPUT_COMPARE_A = updateSpeed;

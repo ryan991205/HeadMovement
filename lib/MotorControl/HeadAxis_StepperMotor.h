@@ -29,7 +29,7 @@ private:
 	GPIO *HALL1;
 	GPIO *HALL2;
 
-
+	CalibrationSet* MotorCalibration;
 
 	// stepper orientation
 	long StepBeginPoint 	= 0;
@@ -67,7 +67,7 @@ public:
 
 	HeadAxis_StepperMotor();
 
-	HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GPIO *hall1, GPIO *hall2, int current);
+	HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GPIO *hall1, GPIO *hall2, int current, CalibrationSet *motorCalibration);
 
 	void Move(int position);
 
