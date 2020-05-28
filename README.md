@@ -20,18 +20,18 @@
 
 ### Setup
 
-- find your arduino library folder used by platformio and add the following librarys that you have cloned;
+- find your arduino library folder used by platformio and add the following cloned libraries;
   - GPIO library
   - tmc26xStepper library
   - Pololumaestro library
-- open platformio within visual studio copde and add the project (Headmovement).
-  - Go to Platform io (PIO HOME) and click on open project
-- when project is loaded switch to projects; here u can see Embedded\Headmovement project tab
+- open platformio within visual studio code and add the project (Headmovement).
+  - Go to Platform io (PIO HOME) and click on open project.
+- when the project is loaded switch to projects; here you can see Embedded\Headmovement project tab
   - click on configure to edit settings when needed. 
 
 ### Compile/upload
 - Code can be compiled with Travis CI `code` 
-- to compile simply press Platform IO logo and click build!
+- to compile press Platform IO logo and click build!
   - maybe you do need to select COM port first before uploading!
  
  
