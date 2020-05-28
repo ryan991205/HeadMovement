@@ -6,9 +6,9 @@
 #include "IHeadAxis.h"
 
 typedef struct {	
-	 uint16_t pan;					
-	 uint16_t tilt;
-     uint16_t roll;					
+	 int16_t pan;					
+	 int16_t tilt;
+     int16_t roll;					
 } Location;
 
 
@@ -19,10 +19,13 @@ class HeadControl{
     IHeadAxis* PanMotor;
     IHeadAxis* TiltMotor;
     IHeadAxis* RollMotor;
+    uint8_t RollMotorPresent;
 
-    Location HomeLocation;
-    Location CurrentLocation;
-    Location GoingToLocation;
+    Location HomeLocation = {0,0,0};
+    Location CurrentLocation = {0,0,0};
+    Location GoingToLocation= {0,0,0};
+
+    Location GetLocationFromMotors();
 
     public:
 
@@ -36,13 +39,11 @@ class HeadControl{
 
     Location getCurrentLocation();
 
-    void setHome(Location location)
-    {
+    void setHome(Location location){
        HomeLocation = location;
     }
 
-    Location getHome()
-    {
+    Location getHome(){
         return HomeLocation;
     }
  

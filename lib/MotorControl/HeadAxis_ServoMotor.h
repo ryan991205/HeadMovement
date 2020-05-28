@@ -16,8 +16,7 @@
 #include <SoftwareSerial.h>
 
 
-class HeadAxis_ServoMotor : public IHeadAxis 
-{
+class HeadAxis_ServoMotor : public IHeadAxis {
 private:
 
 	MicroMaestro* ServoController;
@@ -34,9 +33,7 @@ public:
 	HeadAxis_ServoMotor(MicroMaestro* ServoHandler, int channel, CalibrationSet* motorCalibration);
 
 	void Move(int position);
-
 	void Move(int position, int speed);
-
 	void Move(int position, int speed, int acceleration);
 
 	int GetCurrentPosition();

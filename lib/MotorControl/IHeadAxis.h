@@ -1,6 +1,7 @@
 #ifndef IHEADAXIS_H
 #define IHEADAXIS_H
 
+#define IGNORE_MOVEMENT 125
 
 typedef struct 
 {
@@ -22,9 +23,7 @@ public:
 	virtual ~IHeadAxis() {}
 
 	virtual void Move(int position) = 0;
-
 	virtual void Move(int position, int speed) = 0;
-
 	virtual void Move(int position, int speed, int acceleration) = 0;
 
 	virtual int GetCurrentPosition() = 0;

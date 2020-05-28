@@ -27,6 +27,10 @@
      - pip install -U platformio
      - platformio update
 
+     # include for communication parsing
+     - wget https://github.com/SofaPirate/AsciiMassage/archive/master.zip -O /tmp/AsciiMassage-master.zip
+     - unzip /tmp/AsciiMassage-master.zip -d /tmp/
+
      # include for Servo motor driver 
      - wget https://github.com/pololu/maestro-arduino/archive/master.zip -O /tmp/maestro-arduino-master.zip
      - unzip /tmp/maestro-arduino-master.zip -d /tmp/

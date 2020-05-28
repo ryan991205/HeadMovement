@@ -15,14 +15,14 @@
 // MAPPING Motors:
 ///         | degrees min | degrees center | degrees max |  | realVal min | realVal center | realVal max
 ///         | ------------|----------------|-------------|--|-------------|----------------|-------------
-///    PAN  | -90         | 0              | +90         |><| 0           |                | 70800+-     (val in Steps /32e)
+///    PAN  | -177        | 0              | +177        |><| 0           |                | 70800+-     (val in Steps /32e)
 ///    TILT | +55         | 0              | -10         |><| 1300/5200   | 1850/7400      | 2000/8000   (val in uS)/(val in programUnits)
 ///    ROLL | -45         | 0              | +45         |><| 1248/5000   | 1645/6580      | 2000/8000   (val in uS)/(val in programUnits)
 ///
 // motor calibration:            Degrees  , program units   
-CalibrationSet PanCalibration =  {  {-90  , 0      },      //min     (auto calibration)
+CalibrationSet PanCalibration =  {  {-177  , 0     },      //min     (auto calibration)
                                     {0    , 0      },      //center  (auto calibration)
-                                    {90   , 0      }};     //max     (auto calibration)
+                                    {177   , 0     }};     //max     (auto calibration)
 CalibrationSet TiltCalibration = {  {-10  , 8000   },      //min     
                                     {0    , 7400   },      //center
                                     {55   , 5200   }};     //max
@@ -63,76 +63,40 @@ IHeadAxis *RollHandler   = &RollMotor;
 // Headcontroller (main system)
 HeadControl Head;
 
+// Communication Protocol / Main controller
+Communicator COM; 
 
-// ADD all Motor Update functions here
-ISR(TIMER1_COMPA_vect)
-{
+
+// ADD all stepper motors update functions here 
+ISR(TIMER1_COMPA_vect){
    PanMotor.Update();
-   TiltMotor.Update();
-   RollMotor.Update();
 }
 
 // Initialisation
-void setup()
-{
+void setup(){
    ServoCommunicator.begin(9600);
-   Serial.begin(9600);
    delay(10);
-
+   
    // Setting up Motors
-   PanMotor  = HeadAxis_StepperMotor(&TMC_CS_Pin, &TMC_DIR_Pin, &TMC_STEP_Pin, &HALL1_PAN, &HALL2_PAN, 120);
+   PanMotor  = HeadAxis_StepperMotor(&TMC_CS_Pin, &TMC_DIR_Pin, &TMC_STEP_Pin, &HALL1_PAN, &HALL2_PAN, 100, &PanCalibration);
    TiltMotor = HeadAxis_ServoMotor(&ServoController, 1, &TiltCalibration);
    RollMotor = HeadAxis_ServoMotor(&ServoController, 0, &RollCalibration);
 
-   // Starting and initialising/calibrate a stepperMotor
-   PanMotor.Calibrate();
    HeadAxis_StepperMotor::StartAutoUpdater();
 
    //init HeadController
    Head = HeadControl(PanHandler , TiltHandler , RollHandler);
+   Head.MoveTo(0,0,0);
 
- Serial.println("# initComplete");
- delay(10);
+   // init Communication handling 
+   COM = Communicator(9600,&Head);
+
+   delay(100);
 }
 
 
 
-void loop() 
-{
-   PanMotor.Move(0);
-
-   RollMotor.Move(0);
-  // TiltMotor.Move(00);
-   delay(2000);
-   //RollMotor.Move(-25);
-   //TiltMotor.Move(45);
-   delay(1000);
-
-/*
-if(GPIO_PinRead(&HALL1_PAN) == LOW)
-{   
-   Serial.println("H1_LOW");
-}
-if(GPIO_PinRead(&HALL2_PAN) == LOW)
-{
-   
-   Serial.println("H2_LOW");
-}
-delay(100);
-*/
-
-
- //GPIO_PinWrite(&TMC_STEP_Pin,HIGH);
- //delay(1);
-// GPIO_PinWrite(&TMC_STEP_Pin,LOW);
- //delay(1);
-
-
- // delay(1000);
- // PanMotor.Move(400);
- // while(1)
- // {
- //PanMotor.Update();
- // }
-
+void loop() {
+   COM.Update();
+   delay(50);
 }
