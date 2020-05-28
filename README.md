@@ -1,7 +1,8 @@
 [![Build Status](https://travis-ci.com/ryan991205/HeadMovement.svg?branch=master)](https://travis-ci.com/ryan991205/HeadMovement)
 
 # Robotic Head Movement
-> functionality to control stepper and servo motors to control a head from a linux or windows embedded pc.
+> headmovement that can be controlled from a linux or windows embedded pc.
+> movement implemented by stepper or servo motors on an AVR microcontroller
 
 
 
