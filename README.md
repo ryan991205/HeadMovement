@@ -28,4 +28,39 @@
 - when project is loaded switch to projects; here u can see Embedded\Headmovement project tab
   - click on configure to edit settings when needed. 
 
-> update and install this package first
+### Compile/upload
+- Code can be compiled with Travis CI `code` 
+- to compile simply press Platform IO logo and click build!
+  - maybe you do need to select COM port first before uploading!
+ 
+ 
+ 
+### Project Dependency 
+```javascript
+|-- <Communicator>
+|   |-- <HeadControl>
+|   |   |-- <MotorControl>
+|   |   |   |-- <PololuMaestro> 1.0.0
+|   |   |   |-- <SoftwareSerial> 1.0
+|   |   |   |-- <Atmel328P_GPIO_C-master>
+|   |   |   |-- <TMC26XStepper-master>
+|   |   |   |   |-- <SPI> 1.0
+|-- <MotorControl>
+|   |-- <PololuMaestro> 1.0.0
+|   |-- <SoftwareSerial> 1.0
+|   |-- <Atmel328P_GPIO_C-master>
+|   |-- <TMC26XStepper-master>
+|   |   |-- <SPI> 1.0
+|-- <HeadControl>
+|   |-- <MotorControl>
+|   |   |-- <PololuMaestro> 1.0.0
+|   |   |-- <SoftwareSerial> 1.0
+|   |   |-- <Atmel328P_GPIO_C-master>
+|   |   |-- <TMC26XStepper-master>
+|   |   |   |-- <SPI> 1.0
+|-- <Atmel328P_GPIO_C-master>
+|-- <PololuMaestro> 1.0.0
+|-- <SoftwareSerial> 1.0
+|-- <TMC26XStepper-master>
+|   |-- <SPI> 1.0`
+```
