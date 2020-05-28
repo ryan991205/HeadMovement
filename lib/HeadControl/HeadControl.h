@@ -39,13 +39,11 @@ class HeadControl{
 
     Location getCurrentLocation();
 
-    void setHome(Location location)
-    {
+    void setHome(Location location){
        HomeLocation = location;
     }
 
-    Location getHome()
-    {
+    Location getHome(){
         return HomeLocation;
     }
  

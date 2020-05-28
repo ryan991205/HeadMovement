@@ -16,31 +16,28 @@ Communicator::Communicator(int baud, HeadControl* head)
 
 void Communicator::Update()
 {
-    if(Serial.peek() == -1) return;
+    if(Serial.peek() == -1) {
+        return;
+    }
 
-    if((Serial.peek() >= GET_POS_COMMAND) && (Serial.peek() <= ALL_MOTORS_COMMAND))
-    {
+    if((Serial.peek() >= GET_POS_COMMAND) && (Serial.peek() <= ALL_MOTORS_COMMAND)){
         int i = 0;
         //cli();
         memset(buffer,115,15);
         buffer[i] = Serial.read();
 
-        while(1)
-        { 
-            if(Serial.peek() != -1)
-            {
+        while(1) { 
+            if(Serial.peek() != -1) {
                 i++;
                 buffer[i] = Serial.read();
 
-                if(i > 12)
-                {
+                if(i > 12) {
                     Serial.println("0000");
                     Serial.flush();
                     return; 
                 }
 
-                if(buffer[i] == END_Communication)
-                {
+                if(buffer[i] == END_Communication){
                    HandleCommand(buffer, i);
                    Serial.flush();
                    //sei();
@@ -49,8 +46,7 @@ void Communicator::Update()
             }
         }
     }
-    else
-    {
+    else{
         Serial.flush();
     } 
 }
@@ -58,14 +54,13 @@ void Communicator::Update()
 // SPEED NOT YET IMPLEMENTED !!!!
 uint8_t Communicator::HandleCommand(uint8_t* Message, int length)
 {
-    if(length <1) return ERROR_UndefinedMessageLength; 
+    if(length <1) {
+        return ERROR_UndefinedMessageLength; 
+    }
 
-    switch (Message[0])
-    {
-        case GET_POS_COMMAND: 
-        {
-            if(Message[1] != END_Communication)
-            {
+    switch (Message[0]){
+        case GET_POS_COMMAND: {
+            if(Message[1] != END_Communication){
                 Serial.write(MESSAGE_INVALID);
                 return ERROR_NotReceived_END_CommunicationByte_onRightPosition;
             }
@@ -79,10 +74,8 @@ uint8_t Communicator::HandleCommand(uint8_t* Message, int length)
             Serial.write(END_Communication);
         }break;   
 
-        case ALL_MOTORS_COMMAND:
-        {
-            if(Message[5] != END_Communication) 
-            {
+        case ALL_MOTORS_COMMAND:{
+            if(Message[5] != END_Communication) {
                 Serial.write(MESSAGE_INVALID);
                 return ERROR_NotReceived_END_CommunicationByte_onRightPosition;
             }
@@ -95,10 +88,8 @@ uint8_t Communicator::HandleCommand(uint8_t* Message, int length)
             Serial.write(MESSAGE_RECEIVED);
         } break;
 
-        case PAN_MOTOR_COMMAND: 
-        {
-            if(Message[3] != END_Communication) 
-            {
+        case PAN_MOTOR_COMMAND: {
+            if(Message[3] != END_Communication) {
                 Serial.write(MESSAGE_INVALID);
                 return ERROR_NotReceived_END_CommunicationByte_onRightPosition; 
             }
@@ -109,10 +100,8 @@ uint8_t Communicator::HandleCommand(uint8_t* Message, int length)
             Serial.write(MESSAGE_RECEIVED);
         } break;
 
-        case TILT_MOTOR_COMMAND: 
-        {
-             if(Message[3] != END_Communication) 
-            {
+        case TILT_MOTOR_COMMAND: {
+             if(Message[3] != END_Communication) {
                 Serial.write(MESSAGE_INVALID);
                 return ERROR_NotReceived_END_CommunicationByte_onRightPosition; 
             }
@@ -123,10 +112,8 @@ uint8_t Communicator::HandleCommand(uint8_t* Message, int length)
             Serial.write(MESSAGE_RECEIVED);
         }break;
 
-        case ROLL_MOTOR_COMMAND: 
-        {
-             if(Message[3] != END_Communication) 
-            {
+        case ROLL_MOTOR_COMMAND: {
+             if(Message[3] != END_Communication) {
                 Serial.write(MESSAGE_INVALID);
                 return ERROR_NotReceived_END_CommunicationByte_onRightPosition; 
             }
@@ -135,6 +122,6 @@ uint8_t Communicator::HandleCommand(uint8_t* Message, int length)
             delay(5);
             Serial.write(MESSAGE_RECEIVED);
         }break; 
-        }
+    }
     return ERROR_UNKNOWN_BEGIN_COMMAND;
 }

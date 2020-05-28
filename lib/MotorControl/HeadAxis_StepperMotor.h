@@ -18,8 +18,6 @@
 #define BEGINPOINTSENSORPIN 9
 #define ENDPOINTSENSORPIN 8
 
-
-
 class HeadAxis_StepperMotor : public IHeadAxis {
 
 private:
@@ -56,12 +54,6 @@ public:
 	static void StartAutoUpdater();
 	static void StopAutoUpdater();
 
-
-
-
-
-
-
 	void Calibrate();
 	void Update();
 
@@ -70,9 +62,7 @@ public:
 	HeadAxis_StepperMotor(GPIO *cs, GPIO *dir, GPIO *step, GPIO *hall1, GPIO *hall2, int current, CalibrationSet *motorCalibration);
 
 	void Move(int position);
-
 	void Move(int position, int speed);
-
 	void Move(int position, int speed, int acceleration);
 
 	int GetCurrentPosition();

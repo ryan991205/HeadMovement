@@ -2,13 +2,11 @@
 #include "HeadControl.h"
 
 
-HeadControl::HeadControl()
-{
-
+HeadControl::HeadControl(){
+    // empty constructor
 }
 
-HeadControl::HeadControl(IHeadAxis* pan, IHeadAxis* tilt)
-{    
+HeadControl::HeadControl(IHeadAxis* pan, IHeadAxis* tilt){    
     PanMotor = pan;
     TiltMotor = tilt;
     RollMotor = 0;
@@ -16,8 +14,7 @@ HeadControl::HeadControl(IHeadAxis* pan, IHeadAxis* tilt)
     CurrentLocation = GetLocationFromMotors();
 }
     
-HeadControl::HeadControl(IHeadAxis* pan, IHeadAxis* tilt, IHeadAxis* roll)
-{
+HeadControl::HeadControl(IHeadAxis* pan, IHeadAxis* tilt, IHeadAxis* roll){
     PanMotor = pan;
     TiltMotor = tilt;
     RollMotor = roll;
@@ -25,13 +22,11 @@ HeadControl::HeadControl(IHeadAxis* pan, IHeadAxis* tilt, IHeadAxis* roll)
     CurrentLocation = GetLocationFromMotors();
 }
 
-Location HeadControl::getCurrentLocation()
-{
+Location HeadControl::getCurrentLocation(){
     return GetLocationFromMotors();
 }
 
-void HeadControl::MoveTo(int pan, int tilt)
-{
+void HeadControl::MoveTo(int pan, int tilt){
     GoingToLocation.pan = pan;
     GoingToLocation.tilt = tilt;
 
@@ -39,13 +34,11 @@ void HeadControl::MoveTo(int pan, int tilt)
     TiltMotor->Move(tilt);
 }
 
-void HeadControl::MoveTo(Location location)
-{
+void HeadControl::MoveTo(Location location){
     MoveTo(location.pan,location.tilt,location.roll);
 }
 
-void HeadControl::MoveTo(int pan, int tilt, int roll)
-{   
+void HeadControl::MoveTo(int pan, int tilt, int roll){   
     GoingToLocation.pan = pan;
     GoingToLocation.tilt = tilt;
     GoingToLocation.roll = roll;
@@ -53,22 +46,17 @@ void HeadControl::MoveTo(int pan, int tilt, int roll)
     PanMotor->Move(pan);
     TiltMotor->Move(tilt);
 
-    if(RollMotorPresent)
-    {
+    if(RollMotorPresent){
         RollMotor->Move(roll);
     }
 }
 
-
-Location HeadControl::GetLocationFromMotors()
-{
+Location HeadControl::GetLocationFromMotors(){
     Location currentLocation = {0,0,0};
     currentLocation.pan = PanMotor->GetCurrentPosition();
     currentLocation.tilt = TiltMotor->GetCurrentPosition();
-    if(RollMotorPresent)
-    {
+    if(RollMotorPresent){
         currentLocation.roll = RollMotor->GetCurrentPosition();
     }
     return currentLocation;  
 }
-

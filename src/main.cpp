@@ -68,17 +68,15 @@ Communicator COM;
 
 
 // ADD all stepper motors update functions here 
-ISR(TIMER1_COMPA_vect)
-{
+ISR(TIMER1_COMPA_vect){
    PanMotor.Update();
 }
 
 // Initialisation
-void setup()
-{
+void setup(){
    ServoCommunicator.begin(9600);
    delay(10);
-
+   
    // Setting up Motors
    PanMotor  = HeadAxis_StepperMotor(&TMC_CS_Pin, &TMC_DIR_Pin, &TMC_STEP_Pin, &HALL1_PAN, &HALL2_PAN, 100, &PanCalibration);
    TiltMotor = HeadAxis_ServoMotor(&ServoController, 1, &TiltCalibration);
@@ -98,8 +96,7 @@ void setup()
 
 
 
-void loop() 
-{
+void loop() {
    COM.Update();
    delay(50);
 }
